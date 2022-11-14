@@ -1,5 +1,5 @@
 # guilded.py
-Mobile-API for [Guilded(https://play.google.com/store/apps/details?id=com.gg.guilded)] social network
+Mobile-API for [Guilded](https://play.google.com/store/apps/details?id=com.gg.guilded) social network
 
 ## Example
 ```python
