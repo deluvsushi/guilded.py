@@ -2,7 +2,7 @@ import requests
 from uuid import uuid4
 
 class Guilded:
-	def __init__(self, platform: str = "native"):
+	def __init__(self, platform: str = "native") -> None:
 		self.api = "https://www.guilded.gg/api"
 		self.headers = {
 			"user-agent": "okhttp/3.12.12",
@@ -12,7 +12,10 @@ class Guilded:
 		self.platform = platform
 		self.hmac_signed_session = None
 
-	def login(self, email: str, password: str):
+	def login(
+			self,
+			email: str,
+			password: str) -> dict:
 		data = {
 			"email": email,
 			"password": password
@@ -36,7 +39,7 @@ class Guilded:
 			self,
 			nickname: str,
 			email: str,
-			password: str):
+			password: str) -> dict:
 		data = {
 			"extraInfo": {},
 			"name": nickname,
@@ -49,7 +52,7 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def get_user_channels(self, user_id: str):
+	def get_user_channels(self, user_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/users/{user_id}/channels",
 			headers=self.headers).json()
@@ -58,17 +61,17 @@ class Guilded:
 			self,
 			user_id: str,
 			limit: int = 1,
-			offset: int = 0):
+			offset: int = 0) -> dict:
 		return requests.get(
 			f"{self.api}/users/{user_id}/posts?maxPosts={limit}&offset={offset}",
 			headers=self.headers).json()
 
-	def get_user_profile(self, user_id: str):
+	def get_user_profile(self, user_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/users/{user_id}/profilev3",
 			headers=self.headers).json()
 
-	def create_team(self, team_name: str):
+	def create_team(self, team_name: str) -> dict:
 		data = {
 			"extraInfo": {
 				"platform": self.platform
@@ -84,27 +87,27 @@ class Guilded:
 	def get_current_user(
 			self,
 			is_login: bool = False,
-			is_v2: bool = True):
+			is_v2: bool = True) -> dict:
 		return requests.get(
 			f"{self.api}/me?isLogin={is_login}&v2={is_v2}",
 			headers=self.headers).json()
 
-	def get_team_groups(self, team_id: str):
+	def get_team_groups(self, team_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/teams/{team_id}/groups",
 			headers=self.headers).json()
 
-	def get_team_channels(self, team_id: str):
+	def get_team_channels(self, team_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/teams/{team_id}/channels",
 			headers=self.headers).json()
 
-	def get_team_members(self, team_id: str):
+	def get_team_members(self, team_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/teams/{team_id}/members",
 			headers=self.headers).json()
 
-	def get_team_info(self, team_id: str):
+	def get_team_info(self, team_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/teams/{team_id}/info",
 			headers=self.headers).json()
@@ -115,7 +118,7 @@ class Guilded:
 			message: str,
 			is_confirmed: bool = False,
 			is_silent: bool = False,
-			is_private: bool = False):
+			is_private: bool = False) -> dict:
 		data = {
 			"messageId": uuid4(),
 			"content": {
@@ -157,7 +160,7 @@ class Guilded:
 	def explore_teams(
 			self,
 			limit: int = 10,
-			sections: list = ["proTeams", "verifiedTeams", "popularTeams"]):
+			sections: list = ["proTeams", "verifiedTeams", "popularTeams"]) -> dict:
 		data = {
 			"limit": limit,
 			"sections": sections
@@ -167,32 +170,32 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def email_verify(self):
+	def email_verify(self) -> dict:
 		return requests.post(
 			f"{self.api}/email/verify",
 			headers=self.headers).json()
 
-	def join_team(self, team_id: str):
+	def join_team(self, team_id: str) -> dict:
 		return requests.put(
 			f"{self.api}/teams/{team_id}/members/{self.user_id}/join",
 			headers=self.headers).json()
 
-	def leave_team(self, team_id: str):
+	def leave_team(self, team_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/teams/{team_id}/members/{self.user_id}",
 			headers=self.headers).json()
 
-	def search_teams(self, query: str, limit: int = 20):
+	def search_teams(self, query: str, limit: int = 20) -> dict:
 		return requests.get(
 			f"{self.api}/search?query={query}&entityType=team&maxResultsPerType={limit}",
 			headers=self.headers).json()
 
-	def search_users(self, query: str, limit: int = 20):
+	def search_users(self, query: str, limit: int = 20) -> dict:
 		return requests.get(
 			f"{self.api}/search?query={query}&entityType=user&maxResultsPerType={limit}&excludedEntityIds={self.user_id}",
 			headers=self.headers).json()
 
-	def change_activity_status(self, status: int):
+	def change_activity_status(self, status: int) -> dict:
 		data = {"status": status}
 		return requests.post(
 			f"{self.api}/users/me/presence",
@@ -202,7 +205,7 @@ class Guilded:
 	def change_profile_status(
 			self,
 			status: str,
-			custom_reaction_id: int):
+			custom_reaction_id: int) -> dict:
 		data = {
 			"content": {
 				"object": "value",
@@ -237,26 +240,26 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def get_friends_list(self):
+	def get_friends_list(self) -> dict:
 		return requests.get(
 			f"{self.api}/users/me/friends",
 			headers=self.headers).json()
 
-	def send_friend_request(self, user_ids: list):
+	def send_friend_request(self, user_ids: list) -> dict:
 		data = {"friendUserIds": user_ids}
 		return requests.post(
 			f"{self.api}/users/me/friendrequests",
 			json=data,
 			headers=self.headers).json()
 
-	def cancel_friend_request(self, user_id: str):
+	def cancel_friend_request(self, user_id: str) -> dict:
 		data = {"friendUserId": user_id}
 		return requests.delete(
 			f"{self.api}/users/me/friendrequests",
 			json=data,
 			headers=self.headers).json()
 
-	def start_dm(self, user_id: str):
+	def start_dm(self, user_id: str) -> dict:
 		data = {
 			"users": [
 				{
@@ -269,17 +272,17 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def get_channel_messages(self, channel_id: str, limit: int = 20):
+	def get_channel_messages(self, channel_id: str, limit: int = 20) -> dict:
 		return requests.get(
 			f"{self.api}/channels/{channel_id}/messages?limit={limit}",
 			headers=self.headers).json()
 
-	def block_user(self, user_id: str):
+	def block_user(self, user_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/users/{user_id}/block",
 			headers=self.headers).json()
 
-	def unblock_user(self, user_id: str):
+	def unblock_user(self, user_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/users/{user_id}/unblock",
 			headers=self.headers).json()
@@ -287,7 +290,7 @@ class Guilded:
 	def edit_profile(
 			self,
 			tagline: str = None,
-			bio: str = None):
+			bio: str = None) -> dict:
 		data = {
 			"userId": self.user_id
 		}
@@ -300,7 +303,7 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def create_post(self, title: str, description: str):
+	def create_post(self, title: str, description: str) -> dict:
 		data = {
 			"userId": self.user_id,
 			"title": title,
@@ -336,7 +339,7 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def get_post_replies(self, post_id: int):
+	def get_post_replies(self, post_id: int) -> dict:
 		return requests.get(
 			f"{self.api}/content/profilePost/{post_id}/replies",
 			headers=self.headers).json()
@@ -346,14 +349,16 @@ class Guilded:
 			post_id: int,
 			custom_reaction_id: int,
 			reaction_pack: str,
-			is_profile_post: bool = True):
-		data = {"customReactionId": custom_reaction_id}
+			is_profile_post: bool = True) -> dict:
+		data = {
+			"customReactionId": custom_reaction_id
+		}
 		return requests.put(
 			f"{self.api}/reactions/profilePost/{post_id}/undefined?reactionPack={reaction_pack}&isProfilePost={is_profile_post}",
 			json=data,
 			headers=self.headers).json()
 
-	def delete_post(self, post_id: int):
+	def delete_post(self, post_id: int) -> dict:
 		return requests.delete(
 			f"{self.api}/users/{self.user_id}/posts/{post_id}",
 			headers=self.headers).json()
@@ -362,7 +367,7 @@ class Guilded:
 			self,
 			post_id: int,
 			title: str,
-			description: str):
+			description: str) -> dict:
 		data = {
 			"userId": self.user_id,
 			"postId": post_id,
@@ -399,7 +404,7 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def delete_message(self, channel_id: str, message_id: str):
+	def delete_message(self, channel_id: str, message_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/channels/{channel_id}/messages/{message_id}",
 			headers=self.headers).json()
@@ -408,7 +413,7 @@ class Guilded:
 			self,
 			team_id: str,
 			team_name: str = None,
-			description: str = None):
+			description: str = None) -> dict:
 		data = {"teamId": team_id}
 		if team_name:
 			data["teamName"] = team_name
@@ -419,7 +424,7 @@ class Guilded:
 			json=data,
 			headers=self.headers).json()
 
-	def get_team_banned_members(self, team_id: str):
+	def get_team_banned_members(self, team_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/teams/{team_id}/members/ban",
 			headers=self.headers).json()
